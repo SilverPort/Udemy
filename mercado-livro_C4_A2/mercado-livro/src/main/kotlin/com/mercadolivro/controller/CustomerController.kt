@@ -4,6 +4,7 @@ import com.mercadolivro.controller.request.PostCustomerRequest
 import com.mercadolivro.model.CustomerModel
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -17,14 +18,21 @@ class CustomerController {
     val customers = mutableListOf<CustomerModel>()
 
     @GetMapping
-    fun getCustomer(): CustomerModel {
-        return CustomerModel("1","pedro","@algo.com")
+    fun getAll(): List<CustomerModel> {
+        return customers
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody customer: PostCustomerRequest){
-        customers.add(CustomerModel("1",customer.nome,customer.email))
+
+        val id:String = if(customers.isEmpty()) "1" else (customers.last().id.toInt() + 1).toString()
+
+        customers.add(CustomerModel(id,customer.nome,customer.email))
     }
 
+    @GetMapping("/{id}")
+    fun getCustomer(@PathVariable id: String): CustomerModel {
+        return customers.filter { it.id == id }.first()        // Recupera e retorna o Objt Customer usando ID
+    }
 }
