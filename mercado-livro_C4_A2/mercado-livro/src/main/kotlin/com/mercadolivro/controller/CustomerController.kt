@@ -12,7 +12,10 @@ class CustomerController {
     val customers = mutableListOf<CustomerModel>()
 
     @GetMapping
-    fun getAll(): List<CustomerModel> {
+    fun getAll(@RequestParam nome: String?): List<CustomerModel> {
+        nome?.let {
+            return customers.filter { it.nome.contains(nome,true) }
+        }
         return customers
     }
 
@@ -26,7 +29,7 @@ class CustomerController {
     }
 
     @GetMapping("/{id}")
-    fun getCustomer(@PathVariable id: String): CustomerModel {
+    fun getCustomer(@PathVariable id: String?): CustomerModel {
         return customers.filter { it.id == id }.first()        // Recupera e retorna o Objt Customer usando ID
     }
 
