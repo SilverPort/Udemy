@@ -3,14 +3,7 @@ package com.mercadolivro.controller
 import com.mercadolivro.controller.request.PostCustomerRequest
 import com.mercadolivro.model.CustomerModel
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("customer")
@@ -38,11 +31,17 @@ class CustomerController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)          //Mostra que foi tudo OK mas não Retorna nada
+    @ResponseStatus(HttpStatus.NO_CONTENT)          //Tudo OK mas sem Retorno
     fun update(@PathVariable id: String, @RequestBody customer: PostCustomerRequest){
         return customers.filter { it.id == id }.first().let {
             it.nome = customer.nome
             it.email = customer.email
         }
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)          //Tudo OK mas sem Retorno
+    fun update(@PathVariable id: String){
+        customers.removeIf{it.id == id}
     }
 }
