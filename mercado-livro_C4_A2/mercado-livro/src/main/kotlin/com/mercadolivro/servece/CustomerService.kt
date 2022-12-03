@@ -15,17 +15,19 @@ class CustomerService {
         return customers
     }
 
-    fun create(customer: PostCustomerRequest){
+    fun create(customer: CustomerModel){
+        val id:String = if(customers.isEmpty()) "1" else (customers.last().id!!.toInt() + 1).toString()
+        customer.id = id;
 
-        customer
+        customers.add(CustomerModel(id,customer.nome,customer.email))
     }
 
     fun getCustomer( id: String?): CustomerModel {
         return customers.filter { it.id == id }.first()        // Recupera e retorna o Objt Customer usando ID
     }
 
-    fun update( id: String, customer: PostCustomerRequest){
-        return customers.filter { it.id == id }.first().let {
+    fun update(customer: CustomerModel){
+        return customers.filter { it.id == customer.id }.first().let {
             it.nome = customer.nome
             it.email = customer.email
         }
